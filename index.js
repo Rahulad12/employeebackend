@@ -17,6 +17,7 @@ app.use(express.json());
 
 // MongoDB Connection
 connectDB();
+
 // API Routes
 app.use("/api/auth", authRouter);
 app.use("/api/employee", empRouter);
@@ -24,7 +25,10 @@ app.use("/api/attendance", attendanceRoutes);
 app.use("/api/admin", adminRouter);
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send({
+    success:true,
+    message:"Api is running"
+  });
 });
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

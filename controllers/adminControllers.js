@@ -43,7 +43,7 @@ const updateUser = async (req, res) => {
 
 const getAllUser = async (req, res) => {
   try {
-    const user = await User.find({});
+    const user = await User.find({}).select("-password");
     if (user.length === 0) {
       return res.status(400).json({
         success: false,
@@ -88,4 +88,4 @@ const getAllEmployee = async (req, res) => {
     });
   }
 };
-export { updateUser,getAllUser,getAllEmployee };
+export { updateUser, getAllUser, getAllEmployee };
