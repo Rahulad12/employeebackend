@@ -2,7 +2,7 @@ import Employee from "../models/Employee.js";
 import logger from "../utils/logger.js";
 
 //get all employee
-const getAllEmployee = async (req, res) => {
+const getEmployee = async (req, res) => {
   const userId = req.user.userId;
   logger.info(`Fetching Employee of ${userId}`);
   try {
@@ -98,4 +98,4 @@ const updateEmployee = async (req, res) => {
   }
 };
 
-export { getAllEmployee, updateEmployee, createEmployee };
+export { getEmployee, updateEmployee, createEmployee };

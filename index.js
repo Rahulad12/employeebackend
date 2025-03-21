@@ -26,8 +26,8 @@ app.use("/api/admin", adminRouter);
 
 app.get("/", (req, res) => {
   res.send({
-    success:true,
-    message:"Api is running"
+    success: true,
+    message: "Api is running",
   });
 });
 app.listen(PORT, () => {
