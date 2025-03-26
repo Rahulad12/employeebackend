@@ -1,25 +1,28 @@
 import mongoose from "mongoose";
 
-const attendanceSchema = new mongoose.Schema(
+const leaveSchema = new mongoose.Schema(
   {
     employee_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Employee",
       required: true,
     },
-    date: {
+    leave_type: {
+      type: String,
+      enum: ["sick", "annual", "unpaid", "maternity", "paternity"],
+      required: true,
+    },
+    start_date: {
       type: Date,
       required: true,
     },
-    clock_in: {
+    end_date: {
       type: Date,
-    },
-    clock_out: {
-      type: Date,
+      required: true,
     },
     status: {
       type: String,
-      enum: ["present", "absent", "late", "half_day"],
+      enum: ["pending", "approved", "rejected"],
       required: true,
     },
     notes: {
@@ -30,7 +33,5 @@ const attendanceSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-const Attendance = mongoose.model("Attendance", attendanceSchema);
-
-export default Attendance;
+const Leave = mongoose.model("Leave", leaveSchema);
+export default Leave;
