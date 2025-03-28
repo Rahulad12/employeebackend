@@ -7,6 +7,11 @@ const attendanceSchema = new mongoose.Schema(
       ref: "Employee",
       required: true,
     },
+    user_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     date: {
       type: Date,
       required: true,
@@ -21,9 +26,6 @@ const attendanceSchema = new mongoose.Schema(
       type: String,
       enum: ["present", "absent", "late", "half_day"],
       required: true,
-    },
-    notes: {
-      type: String,
     },
   },
   {

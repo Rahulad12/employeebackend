@@ -7,7 +7,7 @@ const leaveRouter = express.Router();
 // @route   POST /api/leave
 // @access  Private
 
-leaveRouter.post("/", auth, createLeave);
+leaveRouter.post("/:id", auth, createLeave);
 leaveRouter.get("/", auth, getLeaves);
 
 export default leaveRouter;

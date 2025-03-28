@@ -10,7 +10,8 @@ const createLeave = async (req, res) => {
   }
   try {
     const newLeave = new Leave({
-      employee_id: req.user.userId,
+      employee_id: req.params.id,
+      user_id: req.user.userId,
       leave_type,
       start_date,
       end_date,
@@ -34,7 +35,10 @@ const createLeave = async (req, res) => {
 
 const getLeaves = async (req, res) => {
   try {
-    const leaves = await Leave.find({ employee_id: req.user.userId });
+    const leaves = await Leave.find({ employee_id: req.user.userId }).sort({
+      createdAt: -1,
+    }).populate("employee_id", "name position department join_date");
+
     if (leaves.length === 0) {
       return res.status(404).json({
         success: false,
