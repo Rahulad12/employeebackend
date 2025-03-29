@@ -52,6 +52,8 @@ const createEmployee = async (req, res) => {
         message: "Employee is already in our database",
       });
     }
+    joineddate = new Date(joineddate).toISOString().split("T")[0]; // Format date to YYYY-MM-DD
+
     const newEmp = new Employee({
       name: name,
       email: email,

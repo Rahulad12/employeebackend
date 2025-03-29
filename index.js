@@ -6,6 +6,7 @@ import attendanceRouter from "./routes/attendance.js";
 import authRouter from "./routes/auth.js";
 import adminRouter from "./routes/admin.js";
 import leaveRouter from "./routes/leave.js";
+import settingRouter from "./routes/setting.js";
 import connectDB from "./config/db.js";
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use("/api/employee", empRouter);
 app.use("/api/attendance", attendanceRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/leave", leaveRouter);
+app.use("/api/setting", settingRouter);
 
 app.get("/", (req, res) => {
   res.send({
