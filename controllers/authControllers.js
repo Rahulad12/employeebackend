@@ -66,15 +66,20 @@ const authUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { userId: user._id, role: user.role },
+      { userId: user._id, role: user.role, isAuthenticated: user.isAuthenticated },
       process.env.JWT_SECRET
     );
+
+    user.isAuthenticated = true;
+    await user.save();
 
     logger.info("Login successful");
     return res.status(200).json({
       success: true,
       user: {
         role: user.role,
+        isAuthenticated: user.isAuthenticated,
+        isFormCompleted: user.isFormCompleted,
         token,
       },
       message: "Login successful",
@@ -88,4 +93,38 @@ const authUser = async (req, res) => {
   }
 };
 
-export { authUser, registerUser };
+const logoutUser = async (req, res) => {
+  const userId = req.user.userId;
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      logger.warn("User not found");
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.isAuthenticated = false;
+    await user.save();
+    logger.info("User logged out successfully");
+    return res.status(200).json({ success: true, message: "User logged out successfully" });
+  } catch (error) {
+    logger.warn(`Error logging out user: ${error.message}`);
+    return res.status(500).json({ success: false, message: `Error logging out user: ${error.message}` });
+  }
+
+};
+
+const getUser = async (req, res) => {
+  const userId = req.user.userId;
+  try {
+    const user = await User.findById(userId).select("-password -__v -createdAt -updatedAt ");
+    if (!user) {
+      logger.warn("User not found");
+      return res.status(404).json({ message: "User not found" });
+    }
+    logger.info("User fetched successfully");
+    return res.status(200).json({ success: true, user });
+  } catch (error) {
+    logger.warn(`Error fetching user: ${error.message}`);
+    return res.status(500).json({ success: false, message: `Error fetching user: ${error.message}` });
+  }
+}
+export { authUser, registerUser, logoutUser, getUser };

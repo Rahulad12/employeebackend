@@ -17,6 +17,14 @@ const userSchema = new mongoose.Schema(
       enum: ["admin", "employee", "superadmin"],
       default: "employee",
     },
+    isFormCompleted: {
+      type: Boolean,
+      default: false
+    },
+    isAuthenticated: {
+      type: Boolean,
+      default: false
+    },
     status: {
       type: String,
       enum: ["active", "inactive", "on_leave"],

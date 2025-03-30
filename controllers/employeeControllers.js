@@ -1,4 +1,5 @@
 import Employee from "../models/Employee.js";
+import User from "../models/User.js";
 import logger from "../utils/logger.js";
 
 //get all employee
@@ -35,6 +36,7 @@ const getEmployee = async (req, res) => {
 
 const createEmployee = async (req, res) => {
   const { name, email, phone, position, department, joineddate } = req.body;
+
   if (!name || !email || !phone || !position || !department || !joineddate) {
     logger.error("All field are required");
     return res.status(400).json({
@@ -42,9 +44,11 @@ const createEmployee = async (req, res) => {
       message: "All field are required",
     });
   }
+
   logger.info("Creating employee");
   try {
     const existEmp = await Employee.findOne({ email: email });
+
     if (existEmp) {
       logger.error("Employee is already in our database");
       return res.status(400).json({
@@ -52,18 +56,30 @@ const createEmployee = async (req, res) => {
         message: "Employee is already in our database",
       });
     }
-    joineddate = new Date(joineddate).toISOString().split("T")[0]; // Format date to YYYY-MM-DD
 
+    // Format date to YYYY-MM-DD
     const newEmp = new Employee({
       name: name,
       email: email,
       phone: phone,
       position: position,
       department: department,
-      join_date: joineddate,
+      join_date: new Date(joineddate).toISOString().split("T")[0],
       user_id: req.user.userId,
     });
     await newEmp.save();
+
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      logger.error("User not found");
+      return res.status(400).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    user.isFormCompleted = true;
+    await user.save();
+
     logger.info("Employee register successfully");
     res.status(201).json({
       success: true,
